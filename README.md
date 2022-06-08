@@ -1,8 +1,5 @@
 # flutter_background
 
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/julianassmann)
-
-
 A plugin to keep flutter apps running in the background. Currently only works with Android.
 
 It achieves this functionality by running an [Android foreground service](https://developer.android.com/guide/components/foreground-services) in combination with a [partial wake lock](https://developer.android.com/training/scheduling/wakelock#cpu) and [disabling battery optimizations](https://developer.android.com/training/monitoring-device-state/doze-standby#support_for_other_use_cases) in order to keep the flutter isolate running.
@@ -12,7 +9,7 @@ PRs for iOS are very welcome, although I am not sure if a similiar effect can be
 
 ## Getting started
 
-To use this plugin, add `flutter_background` as a [dependency in your `pubspec.yaml` file](https://pub.dev/packages/flutter_background/install).
+To use this plugin, add `flutter_background` as a [dependency in your `pubspec.yaml` file](https://flutter.dev/docs/development/packages-and-plugins/using-packages).
 
 ### Android
 
@@ -62,15 +59,9 @@ This ensures all permissions are granted and requests them if necessary. It also
 foreground notification. The configuration above results in the foreground notification shown below when
 running `FlutterBackground.enableBackgroundExecution()`.
 
-![The foreground notification created by the code above.](./images/notification.png "The foreground notification created by the code above.")
+![The foreground notification created by the code above.](./images/notification.png "Foreground notification created by the code above.")
 
-The arguments are:
-- `notificationTitle`: The title used for the foreground service notification.
-- `notificationText`: The body used for the foreground service notification.
-- `notificationImportance`: The importance of the foreground service notification.
-- `notificationIcon`: The icon used for the foreground service notification shown in the top left corner. This must be a drawable Android Resource (see [here](https://developer.android.com/reference/android/app/Notification.Builder#setSmallIcon(int,%20int)) for more). E. g. if the icon with name "background_icon" is in the "drawable" resource folder, it should be of value `AndroidResource(name: 'background_icon', defType: 'drawable').
-- `enableWifiLock`: Indicates whether or not a WifiLock is acquired when background execution is started. This allows the application to keep the Wi-Fi radio awake, even when the user has not used the device in a while (e.g. for background network communications).
-
+The notification icon is for the small icon displayed in the top left of a notification and  must be a drawable Android Resource (see [here](https://developer.android.com/reference/android/app/Notification.Builder#setSmallIcon(int,%20int)) for more).
 In this example, `background_icon` is a drawable resource in the `drawable` folders (see the example app).
 For more information check out the [Android documentation for creating notification icons](https://developer.android.com/studio/write/image-asset-studio#create-notification) for more information how to create and store an icon.  
 
@@ -83,6 +74,7 @@ In order to notify the user about upcoming permission requests by the system, yo
 ```dart
 bool hasPermissions = await FlutterBackground.hasPermissions;
 ```
+
 before calling `FlutterBackground.initialize(...)`. If the app already has all necessary permissions, no permission requests will be displayed to the user.
 
 ### Run app in background
@@ -106,7 +98,7 @@ you can stop the background execution of the app. You must call `FlutterBackgrou
 To check whether background execution is currently enabled, use
 
 ```dart
-bool enabled = FlutterBackground.isBackgroundExecutionEnabled;
+bool enabled = FlutterBackground.isBackgroundExecutionEnabled
 ```
 
 ## Example

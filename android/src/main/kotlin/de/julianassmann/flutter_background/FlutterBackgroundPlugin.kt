@@ -1,9 +1,11 @@
 package de.julianassmann.flutter_background
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import androidx.annotation.NonNull
+import android.os.Build
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -31,7 +33,7 @@ class FlutterBackgroundPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     @JvmStatic
-    val NOTIFICATION_TITLE_KEY = "android.notificationTitle"
+    var notificationTitle: String? = "flutter_background foreground service"
     @JvmStatic
     val NOTIFICATION_TITLE_KEY = "android.notificationTitle"
     @JvmStatic
@@ -75,9 +77,9 @@ class FlutterBackgroundPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
 
   private fun isValidResource(context: Context, name: String, defType: String, result: Result, errorCode: String): Boolean {
-    val resourceId = context.resources.getIdentifier(name, defType, context.packageName)
+    val resourceId = context.getResources().getIdentifier(name, defType, context.getPackageName())
     if (resourceId == 0) {
-      result.error("ResourceError", "The resource $defType/$name could not be found. Please make sure it has been added as a resource to your Android head project.", errorCode)
+      result.error("ResourceError", "The resource $defType/$name could not be found. Please make sure it has been added as a resource to your Android head project.", null)
       return false
     }
     return true
@@ -93,7 +95,7 @@ class FlutterBackgroundPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         result.success("Android ${android.os.Build.VERSION.RELEASE}")
       }
       "hasPermissions" -> {
-        val hasPermissions = permissionHandler!!.isIgnoringBatteryOptimizations()
+        var hasPermissions = permissionHandler!!.isIgnoringBatteryOptimizations()
                 && permissionHandler!!.isWakeLockPermissionGranted()
         result.success(hasPermissions)
       }
@@ -107,10 +109,9 @@ class FlutterBackgroundPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         // Set static values so the IsolateHolderService can use them later on to configure the notification
         notificationImportance = importance ?: notificationImportance
         notificationTitle = title ?: notificationTitle
-        notificationText = text ?: notificationText
+        notificationText = text ?: text
         notificationIconName = iconName ?: notificationIconName
         notificationIconDefType = iconDefType ?: notificationIconDefType
-        enableWifiLock = wifiLock ?: enableWifiLock
 
         saveNotificationConfiguration(context)
 
@@ -143,7 +144,6 @@ class FlutterBackgroundPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
           result.error("PermissionError", "The battery optimizations are not turned off.", "")
         } else {
           val intent = Intent(context, IsolateHolderService::class.java)
-          intent.action = IsolateHolderService.ACTION_START
           if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             context!!.startForegroundService(intent)
           } else {

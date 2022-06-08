@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'app.dart';
+import 'package:flutter_background_example/app.dart';
 
 void main() {
-  runApp(App());
+  runApp(BackgroundSocketsExampleApp());
 }
