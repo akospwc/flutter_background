@@ -26,6 +26,7 @@ class FlutterBackground {
           'android.notificationIconName': androidConfig.notificationIcon.name,
           'android.notificationIconDefType':
               androidConfig.notificationIcon.defType,
+          'android.enableWifiLock': androidConfig.enableWifiLock,
         }) ==
         true;
     return _isInitialized;
@@ -81,10 +82,13 @@ class FlutterBackground {
   static int _androidNotificationImportanceToInt(
       AndroidNotificationImportance importance) {
     switch (importance) {
-      case AndroidNotificationImportance.Low:
-        return -1;
-      case AndroidNotificationImportance.Min:
-        return -2;
+      // Low and min importance levels apparantly are not supported, see
+      // https://github.com/JulianAssmann/flutter_background/issues/37 for more.
+
+      // case AndroidNotificationImportance.Low:
+      //   return -1;
+      // case AndroidNotificationImportance.Min:
+      //   return -2;
       case AndroidNotificationImportance.High:
         return 1;
       case AndroidNotificationImportance.Max:
